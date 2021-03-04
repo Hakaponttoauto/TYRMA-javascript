@@ -1,21 +1,22 @@
 class PlayerActor extends Actor {
     act() {
-        this.move(1,0)
+        this.owner.move(1,0);
         Game.engine.lock();
-        window.addEventListener("keypress", this);
+        window.addEventListener("keydown", this.handleEvent);
     }
     handleEvent(input) {
         if (input.keyCode === ROT.VK_LEFT) {
-            this.move(-1, 0);
+            this.owner.move(-1, 0);
         } else if (input.keyCode === ROT.VK_RIGHT) {
-            this.move(1, 0);
+            this.owner.move(1, 0);
         } else if (input.keyCode === ROT.VK_UP) {
-            this.move(0, -1);
+            this.owner.move(0, -1);
         } else if (input.keyCode === ROT.VK_DOWN) {
-            this.move(0, 1);
+            this.owner.move(0, 1);
         }
-        window.removeEventListener("keydown", this);
+        window.removeEventListener("keydown", this.handleEvent);
         Game.engine.unlock();
+        Game.level.render();
     }
 }
 
@@ -30,8 +31,9 @@ let Game = {
         let map = new Tilemap(this.width,this.height);
         let objects = new Objects();
         this.level = new Playfield(map,objects);
-        let player=new GameObject(6,6,"@","Player","white", new PlayerActor(10))
+        let player=new GameObject(6,6,"@","Player","white", new PlayerActor(1))
         this.level.objects.new_object(player);
+        this.scheduler.add(player);
         this.engine.start();
     },
 

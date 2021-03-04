@@ -1,7 +1,7 @@
 class Actor {
     constructor(hp) {
         this.hp=hp;
-        this.act=function() {}
+        this.owner={}
     }
 }
 
@@ -13,7 +13,7 @@ class GameObject {
         this.name=name;
         this.color=color;
         this.actor=actor;
-        if (!this.actor === undefined) {
+        if (!(this.actor === undefined)) {
             this.actor.owner=this;
             this.act = this.actor.act
         }
