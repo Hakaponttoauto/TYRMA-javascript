@@ -1,10 +1,22 @@
+class Actor {
+    constructor(hp) {
+        this.hp=hp;
+        this.act=function() {}
+    }
+}
+
 class GameObject {
-    constructor(x,y,char,name,color) {
+    constructor(x,y,char,name,color,actor) {
         this.x=x;
         this.y=y;
         this.char=char;
         this.name=name;
         this.color=color;
+        this.actor=actor;
+        if (!this.actor === undefined) {
+            this.actor.owner=this;
+            this.act = this.actor.act
+        }
     }
 
     move(move_x,move_y) {
@@ -22,6 +34,7 @@ class Objects {
 
     new_object(object) {
         this.objects.push(object);
+        Game.scheduler.add(object,true);
     }
 
     get_objects(x,y) {
