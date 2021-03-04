@@ -1,4 +1,7 @@
 class PlayerActor extends Actor {
+    constructor(hp) {
+        super(hp)
+    }
     act() {
         this.move(1,0)
         Game.engine.lock();
@@ -31,7 +34,7 @@ let Game = {
         let objects = new Objects();
         this.level = new Playfield(map,objects);
         this.level.objects.new_object(new GameObject(6,6,"@","Player","white", new PlayerActor(10)));
-        this.engine.start();
+        this.loop()
     },
 
     init: function() {
@@ -39,9 +42,17 @@ let Game = {
         document.body.appendChild(this.display.getContainer());
 
         this.scheduler = new ROT.Scheduler.Simple();
-        this.engine = new ROT.Engine(this.scheduler);
 
         this.start();
-        this.level.render(this.display);
+        this.level.render();
+    },
+
+    loop: async function() {
+        while (1) {
+            let next = this.scheduler.next();
+            console.log(JSON.stringify(next))
+            await next.act();
+            this.level.render();
+        }
     }
 }
