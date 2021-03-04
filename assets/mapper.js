@@ -21,7 +21,7 @@ class Tilemap {
                 if (this.map[x] === undefined) {
                     this.map[x] = [];
                 }
-                this.map[x][y] = new Tile("+",true,true,"gray","black");
+                this.map[x][y] = new Tile(".",false,false,"gray","black");
             }
         }
     }

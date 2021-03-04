@@ -15,7 +15,9 @@ class GameObject {
         this.actor=actor;
         if (!(this.actor === undefined)) {
             this.actor.owner=this;
-            this.act = this.actor.act
+            this.act = function() {
+                this.actor.act();
+            }
         }
     }
 
@@ -69,7 +71,7 @@ class Playfield {
         this.objects=objects;
     }
     blocked(x,y) {
-        blocked=false;
+        let blocked=false;
         if (this.map.blocked(x,y)) {
             blocked=true;
         }
