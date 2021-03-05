@@ -57,10 +57,13 @@ class Objects {
         }
     }
 
-    render() {
+    render(visible) {
         for (let object of this.objects) {
-            let tile = Game.level.tile(object.x,object.y);
-            Game.display.draw(object.x,object.y,object.char,object.color,tile.bgcolor);
+            let key = object.x+","+object.y;
+            if (key in visible) {
+                let tile = Game.level.tile(object.x,object.y);
+                Game.display.draw(object.x,object.y,object.char,object.color,tile.bgcolor);
+            }
         }
     }
 }
@@ -69,6 +72,7 @@ class Playfield {
     constructor(map, objects) {
         this.map=map;
         this.objects=objects;
+        this.fov = new ROT.FOV.RecursiveShadowcasting(this.lightPasses);
     }
     blocked(x,y) {
         let blocked=false;
@@ -83,8 +87,18 @@ class Playfield {
     tile(x,y) {
         return this.map.getTile(x,y);
     }
+    lightPasses(x,y) {
+        return !Game.level.map.getTile(x,y).blocksight;
+    }
     render() {
-        this.map.render();
-        this.objects.render();
+        let visible={};
+        this.fov.compute(Game.player.x, Game.player.y, 10, function(x, y, r, visibility) {
+            visible[x+","+y]=true;
+        });
+        this.map.render(visible);
+        this.objects.render(visible);
+    }
+    generate() {
+        this.map.generate();
     }
 }

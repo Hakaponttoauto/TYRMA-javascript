@@ -21,6 +21,7 @@ class PlayerActor extends Actor {
         }
         window.removeEventListener("keypress", this);
         Game.engine.unlock();
+        Game.display.clear();
         Game.level.render();
     }
 }
@@ -31,13 +32,15 @@ let Game = {
     height: 30,
     width: 100,
     scheduler: null,
+    player: null,
 
     start: function() {
         let map = new Tilemap(this.width,this.height);
         let objects = new Objects();
         this.level = new Playfield(map,objects);
-        let player=new GameObject(6,6,"@","Player","white", new PlayerActor(1))
-        this.level.objects.new_object(player);
+        Game.player=new GameObject(6,6,"@","Player","white", new PlayerActor(1));
+        this.level.objects.new_object(this.player);
+        this.level.generate();
         this.engine.start();
     },
 
