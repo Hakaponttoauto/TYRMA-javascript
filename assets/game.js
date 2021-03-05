@@ -1,21 +1,25 @@
 class PlayerActor extends Actor {
     act() {
         Game.engine.lock();
-        window.addEventListener("keypress", this.handleEvent);
-        this.owner.move(1,-1)
+        window.addEventListener("keypress", this);
     }
     handleEvent(input) {
         let key = String.fromCharCode(input.charCode);
-        if (key=="a") {
-            this.owner.move(-1, 0);
-        } else if (key=="d") {
-            this.owner.move(1, 0);
-        } else if (key=="w") {
-            this.owner.move(0, -1);
-        } else if (key=="s") {
-            this.owner.move(0, 1);
+        switch (key) {
+            case "a":
+                this.owner.move(-1, 0);
+                break;
+            case "d":
+                this.owner.move(1, 0);
+                break;
+            case "w":
+                this.owner.move(0, -1);
+                break;
+            case "s":
+                this.owner.move(0, 1);
+                break;
         }
-        window.removeEventListener("keypress", this.handleEvent);
+        window.removeEventListener("keypress", this);
         Game.engine.unlock();
         Game.level.render();
     }
